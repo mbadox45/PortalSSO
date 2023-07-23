@@ -2,12 +2,14 @@
 import { computed, watch, onMounted, ref } from 'vue';
 import AppTopbar from './AppTopbar.vue';
 import AppFooter from '../AppFooter.vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 // import AppSidebar from './AppSidebar.vue';
 // import AppConfig from './AppConfig.vue';
 import { useLayout } from '@/layout/composables/layout2';
 
 const router = useRouter();
+const route = useRoute();
+const route_name = computed(() => route.name)
 
 const { layoutConfig, layoutState, isSidebarActive } = useLayout();
 
@@ -54,6 +56,7 @@ const tokenChecker = () => {
             console.log('expired');
         } else {
             console.log('Token activated');
+            console.log(token);
             // config.headers['Authorization'] = `Bearer ${token}`;
         }
     }
@@ -101,7 +104,7 @@ const isOutsideClicked = (event) => {
         <!-- <div class="layout-sidebar">
             <app-sidebar></app-sidebar>
         </div> -->
-        <div class="layout-main-container">
+        <div class="layout-main-container bg-no-repeat bg-cover bg-center" style="background-image: url('/layout/bg5.jpg');;">
             <div class="layout-main">
                 <router-view></router-view>
             </div>

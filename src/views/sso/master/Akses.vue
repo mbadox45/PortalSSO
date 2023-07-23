@@ -41,21 +41,19 @@ const modalApps = (status,id) => {
     if (status == 'add') {
         titleModal.value = 'Add Access';
         resetForms();
-    } else {
+    } else if (status == 'edit') {
         titleModal.value = 'Edit Access';
-        loadingGetAccess.value = 'Loading...';
-        setTimeout(function() {
-            AccessService.getAccessByID(id).then(res => {
-                loadingGetAccess.value = null;
-                form_apps.value = {
-                    app_id: res.app_id,
-                    user_id: users.value.code,
-                    level_akses: res.level_akses,
-                    akses_id: res.akses_id,
-                    user:users.value.name,
-                }
-            })
-        }, 2000);
+        console.log(id);
+        form_apps.value = {
+            app_id: id.app_id,
+            user_id: users.value.code,
+            level_akses: id.level_akses,
+            akses_id: id.akses_id,
+            user:users.value.name,
+        }
+    } else {
+        titleModal.value = 'Delete Access';
+        form_apps.value.app_id = id.app_id
     }
 };
 
@@ -86,13 +84,17 @@ const submitData = (status) => {
             loadSelected();
             closeConfirmation();
         })
-    } else {
+    } else if (status == 'edit') {
         AccessService.updateAccess(form_apps.value.akses_id, form_apps.value).then(res => {
             console.log(res);
             toast.add({ severity: 'success', summary: 'Successfully', detail: `Updated successfully`, life: 3000 });
             loadSelected();
             closeConfirmation();
         })
+    } else {
+        toast.add({ severity: 'success', summary: 'Successfully', detail: `Deleted successfully`, life: 3000 });
+        closeConfirmation();
+        console.log(status)
     }
 }
 
@@ -204,7 +206,7 @@ const searchCountry = (event) => {
                     <template #header>
                         <h4>{{ titleModal }} <span class="ml-5 text-xl">{{loadingGetAccess}}</span></h4>
                     </template>
-                    <div class="p-fluid formgrid grid">
+                    <div class="p-fluid formgrid grid" v-show="titleModal != 'Delete Access'">
                         <div class="field col-12 md:col-12">
                             <label for="firstname2">Nama</label>
                             <InputText id="email" type="text" autocomplete="off" placeholder="Nama" disabled v-model="form_apps.user"/>
@@ -218,9 +220,12 @@ const searchCountry = (event) => {
                             <Dropdown v-model="form_apps.level_akses" :options="loadAkses" optionValue="level_akses" optionLabel="name" placeholder="Access Level" />
                         </div>
                     </div>
+                    <div class="p-fluid" v-show="titleModal == 'Delete Access'">
+                        <span>Apakah anda ingin menghapus akses ini ? </span>
+                    </div>
                     <template #footer>
                         <Button label="No" icon="pi pi-times" @click="closeConfirmation" class="p-button-text p-button-danger" />
-                        <Button label="Save" icon="pi pi-save" @click="submitData(titleModal=='Edit Access'? 'edit' : 'add')" class="p-button-text p-button-success" autofocus />
+                        <Button label="Submit" icon="pi pi-save" @click="submitData(titleModal=='Edit Access'? 'edit' : titleModal=='Add Access'? 'add':'delete')" class="p-button-text p-button-success" autofocus />
                     </template>
                 </Dialog>
 
@@ -266,8 +271,8 @@ const searchCountry = (event) => {
                                 </template>
                                 <template #body="slotProps">
                                     <div class="flex">
-                                        <Button icon="pi pi-pencil" type="button" class="p-button-text p-button-warning" @click="modalApps('edit',slotProps.data.akses_id)"></Button>
-                                        <Button icon="pi pi-trash" type="button" class="p-button-text p-button-danger"></Button>
+                                        <Button icon="pi pi-pencil" type="button" class="p-button-text p-button-warning" @click="modalApps('edit',slotProps.data)"></Button>
+                                        <Button icon="pi pi-trash" type="button" class="p-button-text p-button-danger" @click="modalApps('delete',slotProps.data.akses_id)"></Button>
                                     </div>
                                 </template>
                             </Column>

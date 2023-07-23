@@ -1,4 +1,5 @@
 export const baseURL = 'http://36.92.181.10:4763/api/';
+// export const baseURL = 'http://localhost:8001/api/';
 
 // // With Authorization
 export const headerAuth = {

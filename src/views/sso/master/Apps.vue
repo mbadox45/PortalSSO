@@ -132,14 +132,15 @@ const submitData = (status) => {
         }
         AppService.addApp(formData).then(res => {
             const load = res.data;
-            if (load.code == 200) {
-                toast.add({ severity: 'success', summary: 'Successfully', detail: `Data saved successfully`, life: 3000 });
-                loadApp();
-                closeConfirmation()
-            } else {
-                toast.add({ severity: 'warn', summary: 'Caution', detail: `Process failed`, life: 3000 });
-                closeConfirmation()
-            }
+            toast.add({ severity: 'success', summary: 'Successfully', detail: `Data saved successfully`, life: 3000 });
+            loadApp();
+            closeConfirmation()
+            // if (load.code == 200) {
+            // } else {
+            //     toast.add({ severity: 'warn', summary: 'Caution', detail: `Process failed`, life: 3000 });
+            //     loadApp();
+            //     closeConfirmation()
+            // }
         })
     } else {
         let formData = {};
@@ -163,6 +164,7 @@ const submitData = (status) => {
                 closeConfirmation()
             } else {
                 toast.add({ severity: 'warn', summary: 'Caution', detail: `Process failed`, life: 3000 });
+                loadApp();
                 closeConfirmation()
             }
         })

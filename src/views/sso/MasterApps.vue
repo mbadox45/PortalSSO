@@ -39,7 +39,7 @@ export default {
 <template>
     <div class="grid">
         <div class="col-12 md:col-12">
-            <Breadcrumb :home="breadcrumbHome" :model="breadcrumbItems" class="bg-gray-300" />
+            <Breadcrumb :home="breadcrumbHome" :model="breadcrumbItems" class="bg-orange-100" />
         </div>
         <div class="col-12 md:col-12">
             <div class="card">

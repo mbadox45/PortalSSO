@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useLayout } from '@/layout/composables/layout2';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
 const { layoutConfig, onMenuToggle } = useLayout();
 
@@ -9,6 +9,8 @@ const outsideClickListener = ref(null);
 const topbarMenuActive = ref(false);
 const displayConfirmation = ref(false);
 const router = useRouter();
+const route = useRoute();
+const route_name = computed(() => route.name)
 const payload = JSON.parse(localStorage.getItem('payload'));
 
 onMounted(() => {
@@ -22,6 +24,10 @@ onBeforeUnmount(() => {
 const logoUrl = computed(() => {
     return `layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
 });
+
+const links = (paths) => {
+    router.push({ path: paths })
+}
 
 const onTopBarMenuButton = () => {
     topbarMenuActive.value = !topbarMenuActive.value;
@@ -69,14 +75,19 @@ const isOutsideClicked = (event) => {
 </script>
 
 <template>
-    <div class="layout-topbar bg-[#138D75]">
-        <router-link to="/home" class="layout-topbar-logo sm:flex hidden">
-            <!-- <img src="demo/images/avatar/inl-ori2.png" alt="logo" width="50" /> -->
-            <img :src="logoUrl" alt="logo" />
-            <span>Portal SSO</span>
-        </router-link>
+    <div class="layout-topbar dark shadow-6 bg-teal-700">
+        <div class="layout-topbar-logo sm:flex hidden align-content-center cursor-pointer" @click="links('/home')">
+            <i class="pi pi-lock text-3xl mr-2 text-white"></i>
+            <span class="text-white font-light">Portal APPS - INL</span>
+        </div>
+        <!-- <router-link to="/home" class="layout-topbar-logo sm:flex hidden align-content-center"> -->
+            <!-- <img src="layout/inl.png" alt="PT. INL" class="p-1" /> -->
+            <!-- <img :src="logoUrl" alt="logo" /> -->
+            <!-- <i class="pi pi-lock text-3xl mr-2 text-white"></i>
+            <span class="text-white">Portal APPS - INL</span> -->
+        <!-- </router-link> -->
 
-        <div class="text-gray-500">
+        <div class="text-gray-300">
             <span class="text-md sm:text-xl font-bold">{{payload.name}}</span>
             <span class="text-xs sm:text-sm flex">{{payload.jabatan}} - Div. {{payload.divisi}}</span>
             <!-- <span class="text-xl font-bold">{{payload.name}}</span> -->
@@ -96,23 +107,23 @@ const isOutsideClicked = (event) => {
             </div>
             <!-- <button class="layout-topbar-button">
             </button> -->
-            <button @click="onSettingsClick('/home')" class="p-link layout-topbar-button" title="Home">
+            <button @click="onSettingsClick('/home')" :class="`${route_name == 'home' ? 'text-teal-700 bg-white' : 'bg-teal-700 text-white hover:text-teal-700 hover:bg-white ease-in-out duration-300'} p-link layout-topbar-button`" title="Home">
                 <i class="pi pi-home"></i>
                 <span>Home</span>
             </button>
-            <button @click="onSettingsClick('/user-profile')" class="p-link layout-topbar-button" title="User Profile">
+            <button @click="onSettingsClick('/user-profile')" :class="`${route_name == 'userprofile' ? 'text-teal-700 bg-white' : 'bg-teal-700 text-white hover:text-teal-700 hover:bg-white ease-in-out duration-300'} p-link layout-topbar-button`" title="User Profile">
                 <i class="pi pi-user"></i>
                 <span>User Profile</span>
             </button>
-            <button @click="onSettingsClick('/management-user')" class="p-link layout-topbar-button" title="Management User" v-show="payload.jabatan == 'super_admin'">
+            <button @click="onSettingsClick('/management-user')" :class="`${route_name == 'managementuser' ? 'text-teal-700 bg-white' : 'bg-teal-700 text-white hover:text-teal-700 hover:bg-white ease-in-out duration-300'} p-link layout-topbar-button`" title="Management User" v-show="payload.jabatan == 'super_admin'">
                 <i class="pi pi-sitemap"></i>
                 <span>Management User</span>
             </button>
-            <button @click="onSettingsClick('/master-apps')" class="p-link layout-topbar-button" title="Master Apps" v-show="payload.jabatan == 'super_admin'">
+            <button @click="onSettingsClick('/master-apps')" :class="`${route_name == 'masterapps' || route_name == 'masterappsaccess' ? 'text-teal-700 bg-white' : 'bg-teal-700 text-white hover:text-teal-700 hover:bg-white ease-in-out duration-300'} p-link layout-topbar-button`" title="Master Apps" v-show="payload.jabatan == 'super_admin'">
                 <i class="pi pi-desktop"></i>
                 <span>Master Apps</span>
             </button>
-            <button @click="displayConfirmation = true" class="p-link layout-topbar-button" title="Sign Out">
+            <button @click="displayConfirmation = true" :class="`bg-teal-700 text-white hover:text-teal-700 hover:bg-white ease-in-out duration-300 p-link layout-topbar-button`" title="Sign Out">
                 <i class="pi pi-sign-out"></i>
                 <span>Sign Out</span>
             </button>

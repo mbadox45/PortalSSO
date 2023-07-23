@@ -1,16 +1,18 @@
 <script setup>
-import { onMounted, reactive, ref, watch } from 'vue';
+import { onMounted, reactive, ref, computed, onBeforeMount } from 'vue';
 import AppService from '@/api/AppService';
 
-const listApp = ref(null)
-
-onMounted(() => {
-    // productService.getProductsSmall().then((data) => (products.value = data));
-    loadApp()
-});
+const listApp = ref([]);
+const searchKeyword = ref('');
+const layout = ref('grid');
+const sortOrder = ref(null);
+const sortField = ref(null);
+const token = localStorage.getItem('usertoken');
+const loadings = ref(true)
 
 const loadApp = () => {
     const payload = JSON.parse(localStorage.getItem('payload'));
+    console.log(token);
     if (payload.jabatan == 'super_admin') {
         AppService.getApp().then(res => {
             const list = [];
@@ -25,6 +27,7 @@ const loadApp = () => {
             }
             listApp.value = list;
             console.log(list);
+            loadings.value = false
         })
     } else {
         AppService.getAppByUserID(payload.sub).then(async res => {
@@ -43,21 +46,39 @@ const loadApp = () => {
             }
             if (list.length > 0) {
                 listApp.value = list;
+                loadings.value = false
             } else {
-                listApp.value = null;
+                listApp.value = [];
+                loadings.value = false
             }
         });
     }
 };
 
-const link = (links) => {
-    window.open(links);
+const filteredList = computed(() => {
+    return listApp.value.filter(item =>
+        item.nama_app.toLowerCase().includes(searchKeyword.value.toLowerCase())
+    );
+});
+
+const link = (id, links) => {
+    const payload = JSON.parse(localStorage.getItem('payload'));
+    if (id == 7) {
+        window.open(`${links}/verify/${payload.sub}?token=${token}`);
+    } else {
+        window.open(`${links}`);
+    }
 };
+
+onBeforeMount(() => {
+    // productService.getProductsSmall().then((data) => (products.value = data));
+    loadApp()
+});
 </script>
 
 <template>
     <div class="grid">
-        <div class="col-12 lg:col-12 xl:col-12 hidden sm:block">
+        <!-- <div class="col-12 lg:col-12 xl:col-12 hidden sm:block">
             <div class="card mb-0">
                 <div class="flex justify-content-between items-center">
                     <div>
@@ -69,28 +90,70 @@ const link = (links) => {
                     </div>
                 </div>
             </div>
+        </div> -->
+        <div class="col-12 lg:col-12 xl:col-12 text-center">
+            <span class="p-input-icon-left w-8">
+                <i class="pi pi-search" />
+                <InputText v-model="searchKeyword" placeholder="Search by App name ..." size="small" style="width: 100%;"/>
+            </span>
+            <!-- <span>{{ filteredList.length }}</span> -->
         </div>
-        <div class="col-12 lg:col-6 xl:col-3" v-for="list in listApp" :key="list.app_id">
+        <div class="col-12 lg:col-12 xl:col-12">
+            <div class="col-12 lg:col-12 xl:col-12 text-center p-6" v-if="listApp.length < 1">
+                <div class="flex align-items-center justify-content-center mb-3" v-if="loadings == true">
+                    <div class="">
+                        <ProgressSpinner aria-label="Loading" style="width: 50px; height: 50px" />
+                    </div>
+                    <div class="text-gray-500 font-semibold">Please wait ...</div>
+                </div>
+                <div v-else>
+                    <p class="text-gray-500 font-semibold text-xl">- Anda belum mendapatkan akses modul aplikasi -</p>
+                    <p class="text-red-600 font-semibold text-md">Silahkan hubungi tim ICT untuk mendapatkan hak akses aplikasi !</p>
+                </div>
+            </div>
+            <DataView :value="filteredList" :layout="layout" :paginator="filteredList.length > 12 ? true : false" :rows="12" :sortOrder="sortOrder" :sortField="sortField" v-else>
+                <template #grid="slotProps">
+                    <div class="col-12 lg:col-3 md:col-6 sm:col-12">
+                        <div class="card m-3 border-none shadow-2 bg-yellow-50">
+                            <div class="flex align-items-center justify-content-between">
+                                <div class="flex align-items-center">
+                                    <Chip :label="slotProps.data.status_app == 1 ? 'Posted' : 'Unposted'" icon="pi pi-tag" class="bg-transparent" />
+                                </div>
+                                <div class="flex align-items-center">
+                                    <span class="font-light text-sm ">PT. Industri Nabati Lestari</span>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <!-- <div class="flex align-items-center justify-content-center h-12rem" style="background-color: aqua;"> -->
+                                <div class="flex align-items-center justify-content-center h-6rem">
+                                    <img :src="slotProps.data.logo_app" :alt="slotProps.data.nama_app" class="max-w-5rem my-3 mx-0" />
+                                </div>
+                                <div class="text-2xl font-semibold">{{ slotProps.data.nama_app }}</div>
+                                <Divider />
+                                <Button icon="pi pi-link" label="Go to app.." severity="primary" text size="small" @click="link(slotProps.data.app_id, slotProps.data.url_app)"></Button>
+                            </div>
+                            <div class="flex align-items-center justify-content-between text-center">
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </DataView>
+        </div>
+        <!-- <div class="col-12 lg:col-6 xl:col-3" v-for="list in listApp" :key="list.app_id">
             <div class="card mb-0">
                 <div class="flex">
                     <div class="mr-3">
-                        <!-- <img src="layout/images/themes/arya-blue.png" alt="Test" width="50" class="shadow-2" /> -->
                         <img :src="list.logo_app" alt="Test" width="70" height="70" />
-                        <!-- <i class="pi pi-globe text-blue-500" style="font-size:5rem;"></i> -->
                     </div>
                     <div class="w-full">
                         <span class="block text-500 text-2xl font-medium mb-2">{{list.nama_app}}</span>
                         <div class="text-900 font-medium text-sm">-</div>
                         <div class="text-right w-full mt-3">
-                            <Chip label="Go to app.." class="bg-white text-gray-400 hover:text-blue-400 hover:bg-blue-50 ease-in-out duration-300 cursor-pointer" @click="link(list.url_app)"></Chip>
+                            <Chip label="Go to app.." class="bg-white text-gray-400 hover:text-blue-400 hover:bg-blue-50 ease-in-out duration-300 cursor-pointer" @click="link(list.app_id, list.url_app)"></Chip>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-12 lg:col-12 xl:col-12 text-center p-6" v-if="listApp == null">
-            <p class="text-gray-500 font-semibold text-xl">- Anda belum mendapatkan akses modul aplikasi -</p>
-            <p class="text-red-600 font-semibold text-md">Silahkan hubungi tim ICT untuk mendapatkan hak akses aplikasi !</p>
-        </div>
+        </div> -->
     </div>
 </template>

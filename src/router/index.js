@@ -193,15 +193,16 @@ const router = createRouter({
 
                 {
                     path: '/master-apps',
-                    name: 'masterapps',
                     component: () => import('@/views/sso/MasterApps.vue'),
                     children: [
                         {
                             path: '/master-apps',
+                            name: 'masterapps',
                             component: () => import('@/views/sso/master/Apps.vue')
                         },
                         {
                             path: '/master-apps/akses',
+                            name:'masterappsaccess',
                             component: () => import('@/views/sso/master/Akses.vue')
                         },
                     ],

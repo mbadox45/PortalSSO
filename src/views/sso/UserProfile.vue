@@ -226,7 +226,7 @@ const submitChangePassword = () => {
             </template>
         </Dialog>
         <div class="col-12 md:col-12">
-            <Breadcrumb :home="breadcrumbHome" :model="breadcrumbItems" class="bg-gray-300" />
+            <Breadcrumb :home="breadcrumbHome" :model="breadcrumbItems" class="bg-orange-100" />
         </div>
         <div class="col-12 md:col-4">
             <div class="card p-fluid">
