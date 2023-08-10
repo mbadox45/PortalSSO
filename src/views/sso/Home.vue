@@ -63,6 +63,7 @@ const filteredList = computed(() => {
 
 const link = (id, links) => {
     const payload = JSON.parse(localStorage.getItem('payload'));
+    console.log(`${links}/verify/${payload.sub}?token=${token}`)
     if (id == 7) {
         window.open(`${links}/verify/${payload.sub}?token=${token}`);
     } else {

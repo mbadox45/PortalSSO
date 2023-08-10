@@ -118,6 +118,38 @@ export const listStatusKaryawan = [
     {status_karyawan:'Karyawan Outsourching', name:'Karyawan Outsourching'},
 ];
 
+// Akses untuk user ketika user baru di create
+// Operator
+export const accessOpr = [
+    {user_id:0, app_id:19, level_akses:2, akses_id:null},
+    {user_id:0, app_id:18, level_akses:5, akses_id:null},
+    {user_id:0, app_id:17, level_akses:5, akses_id:null},
+];
+// Staff / Analyst
+export const accessStf = [
+    {user_id:0, app_id:19, level_akses:2, akses_id:null},
+    {user_id:0, app_id:18, level_akses:5, akses_id:null},
+    {user_id:0, app_id:17, level_akses:5, akses_id:null},
+];
+// Manager / Supervisor
+export const accessSpv = [
+    {user_id:0, app_id:19, level_akses:2, akses_id:null},
+    {user_id:0, app_id:18, level_akses:5, akses_id:null},
+    {user_id:0, app_id:17, level_akses:5, akses_id:null},
+];
+// General Manager
+export const accessGm = [
+    {user_id:0, app_id:19, level_akses:2, akses_id:null},
+    {user_id:0, app_id:18, level_akses:5, akses_id:null},
+    {user_id:0, app_id:17, level_akses:5, akses_id:null},
+];
+// Direktur / Komisaris / SEVP
+export const accessDir = [
+    {user_id:0, app_id:19, level_akses:2, akses_id:null},
+    {user_id:0, app_id:18, level_akses:5, akses_id:null},
+    {user_id:0, app_id:17, level_akses:5, akses_id:null},
+];
+
 export const formUser = {
     id:0,
     nik:'',

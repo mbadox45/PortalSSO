@@ -96,7 +96,7 @@ const isOutsideClicked = (event) => {
             <!-- <span>Test</span> -->
         </div>
 
-        <button class="p-link layout-topbar-menu-button layout-topbar-button" @click="onTopBarMenuButton()">
+        <button class="p-link layout-topbar-menu-button layout-topbar-button bg-teal-700 text-white hover:text-teal-700 hover:bg-white ease-in-out duration-300" @click="onTopBarMenuButton()">
             <i class="pi pi-ellipsis-v"></i>
         </button>
 
