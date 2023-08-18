@@ -64,10 +64,10 @@ const filteredList = computed(() => {
 const link = (id, links) => {
     const payload = JSON.parse(localStorage.getItem('payload'));
     console.log(`${links}/verify/${payload.sub}?token=${token}`)
-    if (id == 7) {
-        window.open(`${links}/verify/${payload.sub}?token=${token}`);
-    } else {
+    if (id == 18 || id == 19) {
         window.open(`${links}`);
+    } else {
+        window.open(`${links}/verify/${payload.sub}?token=${token}`);
     }
 };
 
