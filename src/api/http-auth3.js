@@ -1,8 +1,9 @@
+import { URL_API_Portal } from "./DataVariable";
 import axios from "axios";
 
 const http = axios.create({
     // baseURL:'http://localhost:8001/api/',
-    baseURL:'http://36.92.181.10:4763/api/',
+    baseURL: URL_API_Portal,
     headers:{
         'Content-Type': 'multipart/form-data',
         'Authorization': `Bearer ${localStorage.getItem('usertoken')}`,

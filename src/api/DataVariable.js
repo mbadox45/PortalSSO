@@ -1,3 +1,6 @@
+export const URL_WEB_Portal = 'https://portal.inl.co.id/';
+export const URL_API_Portal = 'http://36.92.181.10:4763/api/';
+
 export const listAkses = [
     { name: 1, level_akses: 1 },
     { name: 2, level_akses: 2 },
@@ -10,6 +13,7 @@ export const listAkses = [
     { name: 9, level_akses: 9 },
     { name: 10, level_akses: 10 },
 ]
+
 
 export const listKelamin = [
     { name: 'Pria', kelamin: 'LK' },

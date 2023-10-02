@@ -10,6 +10,7 @@ import AppConfig from '@/layout/AppConfig.vue';
 
 // API
 import AuthService from '@/api/AuthService';
+import { URL_WEB_Portal } from '@/api/DataVariable';
 
 const toast = useToast();
 const router = useRouter();
@@ -41,7 +42,8 @@ const onSubmit = (e) => {
                     localStorage.setItem('usertoken', token);
                     localStorage.setItem('payload', JSON.stringify(payload));
                     // window.location.replace("http://192.168.1.223:8085/home");
-                    window.location.replace("http://localhost:5173/home");
+                    window.location.replace(`${URL_WEB_Portal}beranda`);
+                    // window.location.replace("http://localhost:5173/home");
                     // router.push('/home');
                 } else {
                     toast.add({ severity: 'warn', summary: 'Attention', detail: 'The password or email you entered is incorrect, please try again', life: 3000 });

@@ -1,4 +1,6 @@
-export const baseURL = 'http://36.92.181.10:4763/api/';
+import { URL_API_Portal } from "./DataVariable";
+
+export const baseURL = URL_API_Portal;
 // export const baseURL = 'http://localhost:8001/api/';
 
 // // With Authorization
