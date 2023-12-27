@@ -1,4 +1,4 @@
-import { URL_API_Portal } from "./DataVariable";
+import { URL_API_Portal } from "./env";
 import axios from "axios";
 
 const http = axios.create({

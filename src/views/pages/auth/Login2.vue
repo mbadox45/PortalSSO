@@ -10,7 +10,7 @@ import AppConfig from '@/layout/AppConfig.vue';
 
 // API
 import AuthService from '@/api/AuthService';
-import { URL_WEB_Portal } from '@/api/DataVariable';
+import { URL_WEB_Portal } from '@/api/env';
 
 const toast = useToast();
 const router = useRouter();
@@ -42,7 +42,7 @@ const onSubmit = (e) => {
                     localStorage.setItem('usertoken', token);
                     localStorage.setItem('payload', JSON.stringify(payload));
                     // window.location.replace("http://192.168.1.223:8085/home");
-                    window.location.replace(`${URL_WEB_Portal}beranda`);
+                    window.location.replace(`${URL_WEB_Portal}home`);
                     // window.location.replace("http://localhost:5173/home");
                     // router.push('/home');
                 } else {
@@ -67,17 +67,17 @@ const onSubmit = (e) => {
 
 <template>
     <!-- <div class="flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden bg-no-repeat bg-cover"> -->
-    <div class="flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden bg-no-repeat bg-cover bg-center" style="background-image: url('/layout/bg1.jpg');">
+    <div class="flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden bg-no-repeat bg-cover bg-center" style="background-image: url('/layout/bg2.jpg');">
         <Toast position="top-center"/>
         <div class="md:flex align-items-center justify-content-center w-full h-full px-3 lg:px-8 md:px-6 sm:px-4">
             <!-- <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)"> -->
             <div class="w-full py-6 sm:py-2 px-5 sm:px-4" style="border-radius: 53px">
                 <div class="text-center">
-                    <img src="/layout/inl.png" alt="PT.INL" class="w-10rem flex-shrink-0"/>
-                    <div class="text-900 text-3xl font-medium mt-3">Portal APPS - INL</div>
+                    <img src="/layout/Portal.png" alt="PT.INL" class="w-20rem sm:w-30rem flex-shrink-0"/>
+                    <!-- <div class="text-900 text-3xl font-medium mt-3">Portal APPS - INL</div>
                     <div>
                         <span class="text-600 font-medium">PT. Industri Nabati Lestari</span>
-                    </div>
+                    </div> -->
                 </div>
 
             </div>
@@ -97,10 +97,10 @@ const onSubmit = (e) => {
 
                     <div class="flex align-items-center justify-content-between mb-5 gap-5">
                         <div class="flex align-items-center"></div>
-                        <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Forgot password?</a>
+                        <a class="font-medium no-underline ml-2 text-right cursor-pointer text-yellow-500" style="color: var(--primary-color)">Forgot password?</a>
                     </div>
                     <label v-if="isLoading == true" class="block text-900 text-xl font-medium mb-2">Loading ...</label>
-                    <Button label="Sign In" class="w-full p-3 text-xl bg-blue-800 border-none" type="submit" rounded></Button>
+                    <Button label="Sign In" class="w-full p-3 text-xl bg-green-500 border-none" type="submit" rounded></Button>
                     <Divider class="mt-5"/>
                     <div class="text-center hidden md:block">
                         <strong>Portal APPS - INL</strong> <span class="mx-1">&copy;</span> 2023 - PT. Industri Nabati Lestari

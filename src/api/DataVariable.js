@@ -1,5 +1,3 @@
-export const URL_WEB_Portal = 'https://portal.inl.co.id/';
-export const URL_API_Portal = 'http://36.92.181.10:4763/api/';
 
 export const listAkses = [
     { name: 1, level_akses: 1 },
@@ -210,4 +208,12 @@ export const formUser = {
     tunjangan_t:'',                
     tunjangan_tt:'',                
     keterangan:'',
+}
+
+// Variable default Forms
+export const formDepartemen = {
+    id: null,
+    divisi_id: null,
+    department: '',
+    kode: '',
 }

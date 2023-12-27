@@ -75,10 +75,9 @@ const isOutsideClicked = (event) => {
 </script>
 
 <template>
-    <div class="layout-topbar dark shadow-6 bg-teal-700">
-        <div class="layout-topbar-logo sm:flex hidden align-content-center cursor-pointer" @click="links('/home')">
-            <i class="pi pi-lock text-3xl mr-2 text-white"></i>
-            <span class="text-white font-light">Portal APPS - INL</span>
+    <div class="layout-topbar dark shadow-6 bg-bluegray-100">
+        <div class="layout-topbar-logo align-content-center cursor-pointer" @click="links('/home')">
+            <!-- <img src="layout/inl.png" alt="PT. INL" class="p-1 w-11rem h-5rem"/> -->
         </div>
         <!-- <router-link to="/home" class="layout-topbar-logo sm:flex hidden align-content-center"> -->
             <!-- <img src="layout/inl.png" alt="PT. INL" class="p-1" /> -->
@@ -87,9 +86,9 @@ const isOutsideClicked = (event) => {
             <span class="text-white">Portal APPS - INL</span> -->
         <!-- </router-link> -->
 
-        <div class="text-gray-300">
-            <span class="text-md sm:text-xl font-bold">{{payload.name}}</span>
-            <span class="text-xs sm:text-sm flex">{{payload.jabatan}} - Div. {{payload.divisi}}</span>
+        <div class="text-yellow-400">
+            <!-- <span class="text-md sm:text-xl font-bold">{{payload.name}}</span>
+            <span class="text-xs sm:text-sm text-green-400 flex">{{payload.jabatan}} - Div. {{payload.divisi}}</span> -->
             <!-- <span class="text-xl font-bold">{{payload.name}}</span> -->
             <!-- <img src="demo/images/avatar/inl.png" alt="logo" width="40" /> -->
             <!-- <i class="pi pi-user"></i> -->
@@ -107,23 +106,27 @@ const isOutsideClicked = (event) => {
             </div>
             <!-- <button class="layout-topbar-button">
             </button> -->
-            <button @click="onSettingsClick('/home')" :class="`${route_name == 'home' ? 'text-teal-700 bg-white' : 'bg-teal-700 text-white hover:text-teal-700 hover:bg-white ease-in-out duration-300'} p-link layout-topbar-button`" title="Home">
+            <button @click="onSettingsClick('/dashboard')" :class="`${route_name == 'dashboard' ? 'text-red-400 bg-white' : 'bg-red-500 text-white hover:text-red-400 hover:bg-white ease-in-out duration-300'} p-link layout-topbar-button`" title="Home">
                 <i class="pi pi-home"></i>
                 <span>Home</span>
             </button>
-            <button @click="onSettingsClick('/user-profile')" :class="`${route_name == 'userprofile' ? 'text-teal-700 bg-white' : 'bg-teal-700 text-white hover:text-teal-700 hover:bg-white ease-in-out duration-300'} p-link layout-topbar-button`" title="User Profile">
+            <button @click="onSettingsClick('/user-profile')" :class="`${route_name == 'userprofile' ? 'text-red-400 bg-white' : 'bg-red-500 text-white hover:text-red-400 hover:bg-white ease-in-out duration-300'} p-link layout-topbar-button`" title="User Profile">
                 <i class="pi pi-user"></i>
                 <span>User Profile</span>
             </button>
-            <button @click="onSettingsClick('/management-user')" :class="`${route_name == 'managementuser' ? 'text-teal-700 bg-white' : 'bg-teal-700 text-white hover:text-teal-700 hover:bg-white ease-in-out duration-300'} p-link layout-topbar-button`" title="Management User" v-show="payload.jabatan == 'super_admin'">
+            <button @click="onSettingsClick('/divisi')" :class="`${route_name == 'managementuser' ? 'text-red-400 bg-white' : 'bg-red-500 text-white hover:text-red-400 hover:bg-white ease-in-out duration-300'} p-link layout-topbar-button`" title="Management User" v-show="payload.jabatan == 'super_admin'">
+                <i class="pi pi-bars"></i>
+                <span>Management Akun</span>
+            </button>
+            <!-- <button @click="onSettingsClick('/management-user')" :class="`${route_name == 'managementuser' ? 'text-red-400 bg-white' : 'bg-red-500 text-white hover:text-red-400 hover:bg-white ease-in-out duration-300'} p-link layout-topbar-button`" title="Management User" v-show="payload.jabatan == 'super_admin'">
                 <i class="pi pi-sitemap"></i>
                 <span>Management User</span>
             </button>
-            <button @click="onSettingsClick('/master-apps')" :class="`${route_name == 'masterapps' || route_name == 'masterappsaccess' ? 'text-teal-700 bg-white' : 'bg-teal-700 text-white hover:text-teal-700 hover:bg-white ease-in-out duration-300'} p-link layout-topbar-button`" title="Master Apps" v-show="payload.jabatan == 'super_admin'">
+            <button @click="onSettingsClick('/master-apps')" :class="`${route_name == 'masterapps' || route_name == 'masterappsaccess' ? 'text-red-400 bg-white' : 'bg-red-500 text-white hover:text-red-400 hover:bg-white ease-in-out duration-300'} p-link layout-topbar-button`" title="Master Apps" v-show="payload.jabatan == 'super_admin'">
                 <i class="pi pi-desktop"></i>
                 <span>Master Apps</span>
-            </button>
-            <button @click="displayConfirmation = true" :class="`bg-teal-700 text-white hover:text-teal-700 hover:bg-white ease-in-out duration-300 p-link layout-topbar-button`" title="Sign Out">
+            </button> -->
+            <button @click="displayConfirmation = true" :class="`bg-gray-600 text-white hover:text-teal-700 hover:bg-white ease-in-out duration-300 p-link layout-topbar-button`" title="Sign Out">
                 <i class="pi pi-sign-out"></i>
                 <span>Sign Out</span>
             </button>

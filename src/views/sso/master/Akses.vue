@@ -102,32 +102,34 @@ const loadSelected = async () => {
     if (users.value.name != null) {
         userid.value = users.value.name;
         respontable.value = 'Loading ....';
-        AppService.getAppByUserID(users.value.code).then(async res => {
-            const load = res;
-            if (load.length > 0) {
-                const list = [];
-                for (let i = 0; i < load.length; i++) {
-                    await AppService.getAppByID(load[i].app_id).then(response =>{
-                        console.log(response)
-                        list[i] = {
-                            no: i+1,
-                            akses_id: load[i].akses_id,
-                            logo_app: response.logo_app,
-                            app_id: load[i].app_id,
-                            nama_app: response.nama_app,
-                            level_akses: load[i].level_akses,
-                            user_id: load[i].user_id,
-                        }
-                    });
+        const response = await AppService.getAppByUserID(users.value.code);
+        const load = response;
+        if (load.length > 0) {
+            const list = [];
+            for (let i = 0; i < load.length; i++) {
+                const app = await appID(load[i].app_id)
+                if (app != null) {
+                    list[i] = {
+                        no: i+1,
+                        akses_id: load[i].akses_id,
+                        logo_app: app.logo_app,
+                        app_id: load[i].app_id,
+                        nama_app: app.nama_app,
+                        level_akses: load[i].level_akses,
+                        user_id: load[i].user_id,
+                    }
                 }
-                akses_user.value = list;
-                console.log(list);
-                respontable.value = null;
-            } else {
-                akses_user.value = null;
-                respontable.value = 'Data not found';
+                // await AppService.getAppByID(load[i].app_id).then(response =>{
+                //     console.log(response)
+                // });
             }
-        });
+            akses_user.value = list;
+            console.log(list);
+            respontable.value = null;
+        } else {
+            akses_user.value = null;
+            respontable.value = 'Data not found';
+        }
     }  else {
         akses_user.value = null;
         respontable.value = null;
@@ -135,8 +137,19 @@ const loadSelected = async () => {
     }
 }
 
-const loadUser = () => {
-    UserService.getUser().then(res => {
+const appID = async(id) => {
+    let data;
+    try {
+        const response = await AppService.getAppByID(id);
+        data = response;
+    } catch (error) {
+        data = null;
+    }
+    return data
+}
+
+const loadUser = async () => {
+    await UserService.getUser().then(res => {
         const load = res;
         if (load != null) {
             const list = [];
@@ -153,8 +166,8 @@ const loadUser = () => {
     })
 }
 
-const loadApp = () => {
-    AppService.getApp().then(res => {
+const loadApp = async () => {
+    await AppService.getApp().then(res => {
         const load = res;
         const data = load;
         const list = [];

@@ -1,14 +1,20 @@
 <script setup>
-import { computed, watch, ref } from 'vue';
+import { computed, watch, onMounted, ref } from 'vue';
 import AppTopbar from './AppTopbar.vue';
 import AppFooter from './AppFooter.vue';
 import AppSidebar from './AppSidebar.vue';
 import AppConfig from './AppConfig.vue';
 import { useLayout } from '@/layout/composables/layout';
 
+import {URL_WEB_Portal} from '@/api/env'
+
 const { layoutConfig, layoutState, isSidebarActive } = useLayout();
 
 const outsideClickListener = ref(null);
+
+onMounted(() => {
+    tokenChecker();
+});
 
 watch(isSidebarActive, (newVal) => {
     if (newVal) {
@@ -55,6 +61,37 @@ const isOutsideClicked = (event) => {
 
     return !(sidebarEl.isSameNode(event.target) || sidebarEl.contains(event.target) || topbarEl.isSameNode(event.target) || topbarEl.contains(event.target));
 };
+
+const tokenChecker = () => {
+    const token = localStorage.getItem('usertoken');
+    
+    if (token) {
+        const tokenData = parseJwt(token);
+        const expirationTime = tokenData.exp * 1000; // Convert expiration time to milliseconds
+
+        if (Date.now() > expirationTime) {
+            // Token has expired, remove it from localStorage
+            localStorage.removeItem('usertoken');
+            localStorage.removeItem('payload');
+            window.location.replace(URL_WEB_Portal);
+            console.log('expired');
+        } else {
+            console.log('Token activated');
+            console.log(token);
+            // config.headers['Authorization'] = `Bearer ${token}`;
+        }
+    }
+}
+
+const parseJwt = (token) => {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+}
 </script>
 
 <template>
@@ -69,7 +106,7 @@ const isOutsideClicked = (event) => {
             </div>
             <app-footer></app-footer>
         </div>
-        <app-config></app-config>
+        <!-- <app-config></app-config> -->
         <div class="layout-mask"></div>
     </div>
 </template>

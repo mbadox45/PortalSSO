@@ -10,6 +10,7 @@ import { useLayout } from '@/layout/composables/layout2';
 const router = useRouter();
 const route = useRoute();
 const route_name = computed(() => route.name)
+const payload = JSON.parse(localStorage.getItem('payload'));
 
 const { layoutConfig, layoutState, isSidebarActive } = useLayout();
 
@@ -106,7 +107,8 @@ const isOutsideClicked = (event) => {
         <!-- <div class="layout-sidebar">
             <app-sidebar></app-sidebar>
         </div> -->
-        <div class="layout-main-container bg-no-repeat bg-cover bg-center" style="background-image: url('/layout/bg5.jpg');;">
+        <div class="layout-main-container bg-white">
+        <!-- <div class="layout-main-container bg-no-repeat bg-cover bg-center" style="background-image: url('/layout/bg5.jpg');;"> -->
             <div class="layout-main">
                 <router-view></router-view>
             </div>
