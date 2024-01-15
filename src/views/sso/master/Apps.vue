@@ -6,6 +6,8 @@ import { useToast } from 'primevue/usetoast';
 import { onMounted, onBeforeMount, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import AppService from '@/api/AppService';
+import axios from 'axios'
+import { header } from '../../../api/http-auth2';
 
 const apps  = ref(null);
 const titleModal  = ref(null);
@@ -27,7 +29,7 @@ const form_apps = ref({
 // Versi Fetch API
 const loadApp = () => {
     AppService.getAllApp().then(res => {
-        const load = res;
+        const load = res.data.data;
         if (load != null) {
             const list = [];
             for (let i = 0; i < load.length; i++) {
@@ -91,7 +93,7 @@ const confirmPostUnpost = (event,id,status) => {
     });
 };
 
-const modalApps = (status,id) => {
+const modalApps = async (status,id) => {
     console.log(status,id)
     displayConfirmation.value = true;
     if (status == 'add') {
@@ -100,15 +102,19 @@ const modalApps = (status,id) => {
     } else {
         titleModal.value = 'Edit Apps';
         loadingGetApps.value = 'Loading ...'
-        AppService.getAppByID(id).then(res => {
+        try {
             loadingGetApps.value = null;
+            const response = await AppService.getAppByID(id);
             form_apps.value = {
-                app_id : res.app_id,
-                nama_app : res.nama_app,
-                url_app: res.url_app,
-                logo_app: res.logo_app,
+                app_id : response.app_id,
+                nama_app : response.nama_app,
+                url_app: response.url_app,
+                file: response.logo_app,
             }
-        })
+            console.log(form_apps.value)
+        } catch (error) {
+            loadingGetApps.value = null;
+        }
     }
 };
 
@@ -123,51 +129,65 @@ const closeConfirmation = () => {
     displayConfirmation.value = false;
 };
 
-const submitData = (status) => {
+const getImageBlob = async (url) => {
+    const res = await fetch(url);
+
+    if (!res.ok) {
+        throw new Error(`Failed to fetch image: ${res.statusText}`);
+    }
+
+    return await res.blob();
+};
+
+const submitData = async (status) => {
     if (status == 'add') {
         const formData = {
             logo_app: files.value.files[0],
             nama_app: form_apps.value.nama_app,
             url_app: form_apps.value.url_app
         }
-        AppService.addApp(formData).then(res => {
-            const load = res.data;
+        const response = await AppService.addApp(formData);
+        const load = response.data.success
+        if (load == true) {
             toast.add({ severity: 'success', summary: 'Successfully', detail: `Data saved successfully`, life: 3000 });
             loadApp();
             closeConfirmation()
-            // if (load.code == 200) {
-            // } else {
-            //     toast.add({ severity: 'warn', summary: 'Caution', detail: `Process failed`, life: 3000 });
-            //     loadApp();
-            //     closeConfirmation()
-            // }
-        })
-    } else {
-        let formData = {};
-        if (files.value == null) {
-            formData = {
-                nama_app: form_apps.value.nama_app,
-                url_app: form_apps.value.url_app
-            }
         } else {
-            formData = {
-                logo_app: files.value.files[0],
-                nama_app: form_apps.value.nama_app,
-                url_app: form_apps.value.url_app
-            }
+            toast.add({ severity: 'warn', summary: 'Caution', detail: `Process failed`, life: 3000 });
+            loadApp();
+            closeConfirmation()
+            
         }
-        AppService.updateApp(form_apps.value.app_id ,formData).then(res => {
-            const load = res.data;
-            if (load.code == 200) {
-                toast.add({ severity: 'success', summary: 'Successfully', detail: `Updated successfully`, life: 3000 });
-                loadApp();
-                closeConfirmation()
-            } else {
-                toast.add({ severity: 'warn', summary: 'Caution', detail: `Process failed`, life: 3000 });
-                loadApp();
-                closeConfirmation()
-            }
-        })
+    } else {
+        console.log(form_apps.value)
+        let formData = new FormData();
+        let fileInput = document.getElementById('lampiran_ID'); 
+        
+        if (fileInput.files.length > 0) {
+            formData.append('logo_app', fileInput.files[0]);
+        } else {
+            const res = await fetch(form_apps.value.file);
+            const imageBlob = await res.blob();
+            const fileName = form_apps.value.file.split('/').pop();
+            console.log(imageBlob , fileName)
+            formData.append('logo_app', imageBlob, fileName);
+        }
+
+        formData.append('nama_app', form_apps.value.nama_app);
+        formData.append('url_app', form_apps.value.url_app);
+        console.log(formData)
+        
+        const response = await AppService.updateApp(form_apps.value.app_id ,formData);
+        const load = response.data.success
+        if (load == true) {
+            toast.add({ severity: 'success', summary: 'Successfully', detail: `Updated successfully`, life: 3000 });
+            loadApp();
+            closeConfirmation()
+        } else {
+            toast.add({ severity: 'warn', summary: 'Caution', detail: `Process failed`, life: 3000 });
+            loadApp();
+            closeConfirmation()
+        }
     }
 }
 
@@ -204,7 +224,7 @@ onMounted(() => {
                         </div>
                         <div class="field col-12 md:col-12">
                             <label for="firstname2">Logo Aplikasi</label><br>
-                            <input type="file" accept="image/*" ref="files" placeholder="Logo Aplikasi" class="p-button-success py-2"/>
+                            <input type="file" accept="image/*" ref="files" id="lampiran_ID" placeholder="Logo Aplikasi" class="p-button-success py-2"/>
                             <!-- <FileUpload mode="basic" name="demo" accept="image/*" type="file" v-model="files" :maxFileSize="1000000" customUpload /> -->
                             <!-- <InputText id="email" type="file" v-model="form_apps.file"/> -->
                         </div>

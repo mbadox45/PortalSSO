@@ -14,6 +14,9 @@ class AuthService{
     postSignIn(data){
         return http.post('login',data);
     }
+    postForgotPassword(data){
+        return http.post('password/reset',data);
+    }
 }
 
 export default new AuthService;

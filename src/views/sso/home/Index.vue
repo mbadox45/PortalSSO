@@ -51,7 +51,7 @@ const items = ref([
 
 const loadApp = async() => {
     const payload = JSON.parse(localStorage.getItem('payload'));
-    console.log(payload);
+    // console.log(payload);
     if (payload.jabatan == 'super_admin') {
         await AppService.getApp().then(res => {
             const list = [];
@@ -78,15 +78,15 @@ const loadApp = async() => {
         for (let i = 0; i < load.length; i++) {
             const app_detail = await appID(load[i].app_id)
             if (app_detail != null) {
-            //     continue;
-                console.log(app_detail)
-                list[i] = {
-                    "no": i+1,
-                    "app_id": app_detail.app_id,
-                    "nama_app": app_detail.nama_app,
-                    "url_app": app_detail.url_app,
-                    "logo_app": app_detail.logo_app,
-                    "status_app": app_detail.status_app,
+                if (app_detail.status_app != 0) {
+                    list[i] = {
+                        "no": i+1,
+                        "app_id": app_detail.app_id,
+                        "nama_app": app_detail.nama_app,
+                        "url_app": app_detail.url_app,
+                        "logo_app": app_detail.logo_app,
+                        "status_app": app_detail.status_app,
+                    }
                 }
             }
         }
@@ -122,11 +122,12 @@ const filteredList = computed(() => {
 
 const link = (id, links) => {
     const payload = JSON.parse(localStorage.getItem('payload'));
-    console.log(`${links}/verify/${payload.sub}?token=${token}`)
-    if (id == 18 || id == 17) {
-        window.open(`${links}`);
+    const pathSegments = new URL(links).pathname.split('/');
+    const lastSegment = pathSegments[pathSegments.length - 1];
+    if (lastSegment == 'verify') {
+        window.open(`${links}/${payload.sub}?token=${token}`);
     } else {
-        window.open(`${links}/verify/${payload.sub}?token=${token}`);
+        window.open(`${links}`);
     }
 };
 

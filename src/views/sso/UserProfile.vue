@@ -44,17 +44,21 @@ const email = ref(null)
 const password = ref(null)
 const repassword = ref(null)
 const disablebtnchangepass = ref(true)
+const loadings = ref(false)
 
 const toast = useToast();
 
 // Given accsess public funtion
-onMounted(() => {
-    // loadUsers();
-    loadDataProv();
-    setTimeout(function() {
-        loadUsers();
-    }, 2000);
+onMounted( async() => {
+    loadAll()
 });
+
+const loadAll = async () => {
+    loadings.value = true
+    await loadUsers();
+    await loadDataProv();
+    loadings.value = false
+}
 
 // Function
 const loadUsers = async () => {
@@ -126,7 +130,7 @@ const loadUsers = async () => {
 };
 
 const loadDataProv = async () => {
-    LocationService.getProv().then(res => {
+    await LocationService.getProv().then(res => {
         const load = res.data.provinsi;
         const list = [];
         for (let i = 0; i < load.length; i++) {
@@ -139,8 +143,8 @@ const loadDataProv = async () => {
     })
 }
 
-const submitData = () => {
-    UserService.updateUser(payload.sub, form_user.value).then(res => {
+const submitData = async() => {
+    await UserService.updateUser(payload.sub, form_user.value).then(res => {
         console.log(res);
         const load = res.data;
         if (load.code == 200) {
@@ -183,12 +187,12 @@ const syncRePassword = () => {
     }
 }
 
-const submitChangePassword = () => {
+const submitChangePassword = async () => {
     const data = {
         email: email.value,
         password: password.value
     }
-    UserService.addPasswordUpdate(data).then(res => {
+    await UserService.addPasswordUpdate(data).then(res => {
         console.log(res);
         const load = res.data;
         if (load.code == 200) {
@@ -254,7 +258,11 @@ const submitChangePassword = () => {
                     </div>
 
                     <div class="col-12 md:col-8">
-                        <div class="card">
+                        <div v-show="loadings == true" class="text-center">
+                            <p>Loading...</p>
+                            <ProgressBar mode="indeterminate" style="height: 10px"></ProgressBar>
+                        </div>
+                        <div class="card" v-show="loadings == false">
                             <h5>IDENTITAS USER</h5>
                             <div class="p-fluid formgrid grid">
                                 <div class="field col-12 md:col-4">

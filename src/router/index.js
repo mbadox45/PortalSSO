@@ -6,21 +6,6 @@ import AppLayout2 from '@/layout/layout_sso/AppLayout.vue';
 const router = createRouter({
     history: createWebHistory(),
     routes: [
-        // {
-        //     path: '/',
-        //     component: AppLayouts,
-        //     redirect:'/home',
-        //     children: [
-        //         {
-        //             path: '/home',
-        //             name: 'home',
-        //             component: () => import('@/views/sso/HomePage.vue'),
-        //             meta:{
-        //                 requiresAuth: true,
-        //             }
-        //         },
-        //     ],
-        // },
         {
             path: '/',
             component: AppLayout,
@@ -96,24 +81,6 @@ const router = createRouter({
             }
         },
         {
-            path: '/',
-            component: AppLayout2,
-            redirect:'/user-profile',
-            children: [
-            ]
-        },
-        // {
-        //     path: '/landing',
-        //     name: 'landing',
-        //     component: () => import('@/views/pages/Landing.vue')
-        // },
-        // {
-        //     path: '/pages/notfound',
-        //     name: 'notfound',
-        //     component: () => import('@/views/pages/NotFound.vue')
-        // },
-
-        {
             path: '/auth/login',
             name: 'login',
             component: () => import('@/views/pages/auth/Login2.vue'),
@@ -121,24 +88,22 @@ const router = createRouter({
                 guestOnly:true,
             }
         },
-        // {
-        //     path: '/auth/login',
-        //     name: 'login',
-        //     component: () => import('@/views/pages/auth/Signin.vue'),
-        //     meta:{
-        //         guestOnly:true,
-        //     }
-        // },
-        // {
-        //     path: '/auth/access',
-        //     name: 'accessDenied',
-        //     component: () => import('@/views/pages/auth/Access.vue')
-        // },
-        // {
-        //     path: '/auth/error',
-        //     name: 'error',
-        //     component: () => import('@/views/pages/auth/Error.vue')
-        // }
+        {
+            path: '/forgot/password',
+            name: 'forgot-password',
+            component: () => import('@/views/pages/auth/ForgotPassword.vue'),
+            meta:{
+                guestOnly:true,
+            }
+        },
+        {
+            path: '/reset/password',
+            name: 'reset-password',
+            component: () => import('@/views/pages/auth/ResetPassword.vue'),
+            meta:{
+                guestOnly:true,
+            }
+        },
     ]
 });
 

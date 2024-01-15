@@ -24,6 +24,11 @@ const logoUrl = computed(() => {
     return `layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
 });
 
+const link_forgot = () => {
+    window.location.replace(`${URL_WEB_Portal}forgot/password`);
+}
+
+
 const onSubmit = (e) => {
     e.preventDefault();
     if (email.value && password.value) {
@@ -97,7 +102,7 @@ const onSubmit = (e) => {
 
                     <div class="flex align-items-center justify-content-between mb-5 gap-5">
                         <div class="flex align-items-center"></div>
-                        <a class="font-medium no-underline ml-2 text-right cursor-pointer text-yellow-500" style="color: var(--primary-color)">Forgot password?</a>
+                        <a class="font-medium no-underline ml-2 text-right cursor-pointer text-yellow-500" style="color: var(--primary-color)" @click="link_forgot">Forgot password?</a>
                     </div>
                     <label v-if="isLoading == true" class="block text-900 text-xl font-medium mb-2">Loading ...</label>
                     <Button label="Sign In" class="w-full p-3 text-xl bg-green-500 border-none" type="submit" rounded></Button>

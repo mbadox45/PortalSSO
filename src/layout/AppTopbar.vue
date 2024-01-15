@@ -21,6 +21,12 @@ onBeforeUnmount(() => {
 const logoUrl = computed(() => {
     return `layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
 });
+const logoutAction = () => {
+    displayConfirmation.value = false;
+    localStorage.removeItem('usertoken');
+    localStorage.removeItem('payload');
+    router.push('/auth/login')
+};
 
 const onTopBarMenuButton = () => {
     topbarMenuActive.value = !topbarMenuActive.value;

@@ -7,6 +7,7 @@ export const baseURL = URL_API_Portal;
 export const headerAuth = {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Methods':'*',
+    'Access-Control-Allow-Origin':'*',
     'Authorization':`Bearer ${localStorage.getItem('usertoken')}`,
 }
 export const headerAuthMultipart = {

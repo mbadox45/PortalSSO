@@ -33,15 +33,17 @@
 
 // Versi Fetch API
 import { baseURL, headerAuth, headerAuthMultipart } from "./http-auth2";
+import http from "./http-auth";
 import http3 from "./http-auth3";
 
 export default new class AppService {
     getAllApp(){
-        return fetch(`${baseURL}all/app`, {
-            headers:headerAuth
-        })
-        .then((res) => res.json())
-        .then((d) => d.data);
+        // return fetch(`${baseURL}all/app`, {
+        //     headers:headerAuth
+        // })
+        // .then((res) => res.json())
+        // .then((d) => d.data);
+        return http.get('all/app');
     }
     getApp(){
         return fetch(`${baseURL}app`, {
@@ -75,6 +77,12 @@ export default new class AppService {
         return fetch(`${baseURL}akses/user/get/${id}`, {
             headers:headerAuth
         })
+        .then((res) => res.json())
+        .then((d) => d.data);
+    }
+
+    getImage(urlImg){
+        return fetch(`${urlImg}`)
         .then((res) => res.json())
         .then((d) => d.data);
     }
