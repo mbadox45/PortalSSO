@@ -1,8 +1,9 @@
 <script setup>
 import { onMounted, reactive, ref, computed, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
-import AppService from '@/api/AppService';
 import AppTopbar from './components/AppTopbar.vue';
+import AppService from '@/api/AppService';
+import { getApp, getAksesApps, getAksesUser } from '@/controller/AksesUser.js'
 
 const router = useRouter();
 const listApp = ref([]);
@@ -50,48 +51,26 @@ const items = ref([
 ]);
 
 const loadApp = async() => {
+    loadings.value = true
     const payload = JSON.parse(localStorage.getItem('payload'));
-    // console.log(payload);
-    if (payload.jabatan == 'super_admin') {
-        await AppService.getApp().then(res => {
-            const list = [];
-            for (let i = 0; i < res.length; i++) {
-            // for (let i = 0; i < 100; i++) {
-                list[i] = {
-                    "no": i+1,
-                    "app_id": res[i].app_id,
-                    "nama_app": res[i].nama_app,
-                    "url_app": res[i].url_app,
-                    "logo_app": res[i].logo_app,
-                    "status_app": res[i].status_app,
-                }
-            }
-            listApp.value = list;
-            console.log(list);
-            loadings.value = false
-        })
-    } else {
-        loadings.value = true
-        const response = await AppService.getAppByUserID(payload.sub);
-        const load = response;
-        const list = [];
-        for (let i = 0; i < load.length; i++) {
-            const app_detail = await appID(load[i].app_id)
-            if (app_detail != null) {
-                if (app_detail.status_app != 0) {
-                    list[i] = {
-                        "no": i+1,
-                        "app_id": app_detail.app_id,
-                        "nama_app": app_detail.nama_app,
-                        "url_app": app_detail.url_app,
-                        "logo_app": app_detail.logo_app,
-                        "status_app": app_detail.status_app,
-                    }
-                }
+    const load_data = await getAksesApps();
+    const list = [];
+    if (load_data != null) {
+        for (let i = 0; i < load_data.length; i++) {
+            list[i] = {
+                "no": load_data[i].no,
+                "app_id": load_data[i].app_id,
+                "nama_app": load_data[i].nama_app,
+                "url_app": load_data[i].url_app,
+                "logo_app": load_data[i].logo_app,
+                "status_app": load_data[i].status_app,
             }
         }
-        listApp.value = list;
         loadings.value = false
+        listApp.value = list;
+    } else {
+        loadings.value = false
+        listApp.value = [];
     }
 };
 
