@@ -99,7 +99,10 @@
                 // Token has expired, remove it from localStorage
                 localStorage.removeItem('usertoken');
                 localStorage.removeItem('payload');
-                window.location.replace(URL_WEB_Portal);
+                setTimeout(function () {
+                    router.push('/auth/login');
+                }, 2000);
+                // window.location.replace(URL_WEB_Portal);
                 console.log('expired');
             } else {
                 console.log('Token activated');
@@ -120,7 +123,10 @@
     const logoutAction = () => {
         localStorage.removeItem('usertoken');
         localStorage.removeItem('payload');
-        window.location.replace(URL_WEB_Portal);
+        setTimeout(function () {
+            router.push('/auth/login');
+        }, 2000);
+        // window.location.replace(URL_WEB_Portal);
     }
 </script>
 

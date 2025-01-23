@@ -46,10 +46,9 @@ const onSubmit = (e) => {
                     const payload = load.payload;
                     localStorage.setItem('usertoken', token);
                     localStorage.setItem('payload', JSON.stringify(payload));
-                    // window.location.replace("http://192.168.1.223:8085/home");
-                    window.location.replace(`${URL_WEB_Portal}home`);
-                    // window.location.replace("http://localhost:5173/home");
-                    // router.push('/home');
+                    setTimeout(function () {
+                        router.push('/home');
+                    }, 2000);
                 } else {
                     toast.add({ severity: 'warn', summary: 'Attention', detail: 'The password or email you entered is incorrect, please try again', life: 3000 });
                     console.log(load);
